@@ -1,7 +1,7 @@
 abstract public class Person {
     private int id;
     private String name;
-    private String sex;
+    private String gender;
     private int age;
     private String post;
 
@@ -13,8 +13,8 @@ abstract public class Person {
     public String getName(){
         return name;
     }
-    public String getSex(){
-        return sex;
+    public String getGender(){
+        return gender;
     }
     public int getAge(){
         return this.age;
@@ -31,8 +31,8 @@ abstract public class Person {
     public void setName(String name){
         this.name = name;
     }
-    public void setSex(String sex){
-        this.sex = sex;
+    public void setGender(String gender){
+        this.gender = gender;
     }
     public void setAge(int age){
         this.age = age;
@@ -41,6 +41,14 @@ abstract public class Person {
         this.post = post;
     }
 
+    @Override
+    public String toString() {
+        return "id=" + id + "\n" +
+                "name=" + name + "\n" +
+                "gender=" + gender + "\n" +
+                "age=" + age + "\n" +
+                "post=" + post + "\n";
+    }
 }
 
 class Teacher extends Person {
@@ -63,6 +71,11 @@ class Teacher extends Person {
         this.experience = experience;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "salary=" + salary + "\n" +
+                                    "experience=" + experience + "\n";
+    }
 }
 
 class Student extends Person {
@@ -99,5 +112,13 @@ class Student extends Person {
 
     public void setTotal_fees(double total_fees) {
         this.total_fees = total_fees;
+    }
+
+    @Override
+    public String toString() {
+        return  "grade=" + grade + "\n" +
+                "avg_mark=" + avg_mark + "\n" +
+                "fees=" + fees + "\n" +
+                "total_fees=" + total_fees + "\n";
     }
 }

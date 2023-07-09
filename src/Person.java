@@ -6,7 +6,6 @@ abstract public class Person {
     private String post;
 
     // Getters
-
     public int getId() {
         return id;
     }
@@ -43,11 +42,11 @@ abstract public class Person {
 
     @Override
     public String toString() {
-        return "id=" + id + "\n" +
-                "name=" + name + "\n" +
-                "gender=" + gender + "\n" +
-                "age=" + age + "\n" +
-                "post=" + post + "\n";
+        return "id: " + id + "\n" +
+                "name: " + name + "\n" +
+                "gender: " + gender + "\n" +
+                "age: " + age + " years old\n" +
+                "post: " + post + "\n";
     }
 }
 
@@ -73,8 +72,8 @@ class Teacher extends Person {
 
     @Override
     public String toString() {
-        return super.toString() + "salary=" + salary + "\n" +
-                                    "experience=" + experience + "\n";
+        return super.toString() + "salary: " + salary + "₽\n" +
+                                    "experience: " + experience + " years\n";
     }
 }
 
@@ -116,9 +115,9 @@ class Student extends Person {
 
     @Override
     public String toString() {
-        return  "grade=" + grade + "\n" +
-                "avg_mark=" + avg_mark + "\n" +
-                "fees=" + fees + "\n" +
-                "total_fees=" + total_fees + "\n";
+        return  "grade: " + grade + "\n" +
+                "avg_mark: " + avg_mark + "\n" +
+                "fees: " + fees + "₽\n" +
+                "total_fees: " + total_fees + "₽\n";
     }
 }

@@ -7,9 +7,9 @@ public class Main {
         new Student();
         new Teacher();
         Scanner scanner = new Scanner(System.in);
+        ConsoleColors consoleColors = new ConsoleColors();
 
         int id = 0;
-
 
         info();
         String response = "";
@@ -29,137 +29,48 @@ public class Main {
                         teacher.setId(id);
 
                         System.out.println("Enter the teacher's name: ");
-                        teacher.setName(scanner.nextLine());
+                        teacher.enterName();
 
                         System.out.println("Enter the teacher's gender: ");
                         System.out.println("f - Female, m - Male");
-                        String gender = "";
-
-                        // checking the correctness of gender input
-                        while (!gender.equalsIgnoreCase("m") || !gender.equalsIgnoreCase("f")){
-                             gender = scanner.nextLine();
-                            if (gender.equalsIgnoreCase("m")){
-                                gender = "Male";
-                                break;
-                            } else if (gender.equalsIgnoreCase("f")) {
-                                gender = "Female";
-                                break;
-                            }
-                            else{
-                                System.out.println(ConsoleColors.RED + "Wrong gender type!");
-                                System.out.println(ConsoleColors.RESET);
-
-                            }
-                        }
-
-                        teacher.setGender(gender);
-
+                        teacher.enterGender();
 
                         System.out.println("Enter the teacher's age");
                         System.out.println("(the age can be from 17 to 120 inclusive):");
-                        int age = 17;
-                        while (true){
-                            try {
-                                age = Integer.parseInt(scanner.nextLine());
-                                if (age < 17 || age >120){
-                                    System.out.println(ConsoleColors.RED + "Attention! The age can be from 17 to 120 inclusive!");
-                                    System.out.println(ConsoleColors.RESET);
-
-                                }
-                                else {
-                                    teacher.setAge(age);
-                                    break;
-                                }
-
-                            }catch (NumberFormatException e){
-                                System.out.println(ConsoleColors.RED + "Invalid data type for age!");
-                                System.out.println(ConsoleColors.RESET);
-
-                            }
-                        }
+                        teacher.enterAge(17, 120);
 
                         System.out.println("Enter the teacher's position: ");
-                        teacher.setPost(scanner.nextLine());
+                        teacher.enterPost();
 
                         System.out.println("Enter the teacher's salary: ");
-                        while(true){
-                            try {
-                                teacher.setSalary(Double.parseDouble(scanner.nextLine()));
-                                break;
-                            }
-                            catch (NumberFormatException e){
-                                System.out.println(ConsoleColors.RED + "Invalid data type for salary!");
-                                System.out.println(ConsoleColors.RESET);
-
-                            }
-
-                        }
+                        teacher.enterSalary();
 
                         System.out.println("Enter the teacher's experience: ");
-                        int experience = 0;
-                        while (true){
-                            experience = Integer.parseInt(scanner.nextLine());
-                            if (experience >= age){
-                                System.out.println(ConsoleColors.RED + "Attention! Experience cannot be greater than or equal to age.");
-                                System.out.println(ConsoleColors.RESET);
+                        teacher.enterExperience();
 
-                            }
-                            else {
-                                teacher.setExperience(experience);
-                                break;
-                            }
-                        }
-
-                        System.out.println(ConsoleColors.GREEN_BOLD + "Done");
-                        System.out.println(ConsoleColors.RESET);
-
+                        consoleColors.GREEN_BOLD("Done");
                     }
                 }
                 case ("STUD") -> System.out.println("add new student here");
                 case ("TDATA") -> {
 
                     if (school.getList_of_teachers() != null && !school.getList_of_teachers().isEmpty()){
-                        System.out.println();
-                        System.out.println("TEACHERS: ");  // shows a list of all teachers in the console
-                        for (Teacher teacher: school.getList_of_teachers()){
-                            System.out.println("| " + teacher.getId() + " | " + teacher.getName() + " |");
-                        }
-                        System.out.println();
-                        System.out.println("Type teacher's id to see more information: ");
-                        System.out.println("Or type \"exit\" to exit");
-                        String selected_teacher_id = "";
-
-                        while (!selected_teacher_id.equals("exit")){
-                            selected_teacher_id = scanner.nextLine();
-                            if (selected_teacher_id.equalsIgnoreCase("exit")){
-                                System.out.println(ConsoleColors.GREEN_BOLD + "Done");
-                                System.out.println(ConsoleColors.RESET);
-                                break;
-                            }
-                            else {
-                                System.out.println();
-                                System.out.println(school.getList_of_teachers().get(Integer.parseInt(selected_teacher_id) - 1).toString());
-                            }
-
-                        }
+                        Teacher teacher = new Teacher();
+                        teacher.setEntity("Teacher");
+                        teacher.getData();
                     }
                     else{
-                        System.out.println(ConsoleColors.YELLOW + "It's seems like there is no teachers.");
-                        System.out.println(ConsoleColors.RESET);
-
+                        consoleColors.YELLOW("It's seems like there is no teachers.");
                     }
 
                 }
                 case ("SDATA") -> System.out.println("get students data here");
-                case ("HELP") -> {
-                    info();
-                }
-                case ("Q") -> System.out.println("Goodbye!");
+                case ("HELP") -> info();
+
+                case ("Q") -> consoleColors.GREEN_BOLD("Goodbye!");
                 case (""), (" "), ("\n") -> {}
-                default ->{
-                    System.out.println(ConsoleColors.RED + "Not a valid response.");
-                    System.out.println(ConsoleColors.RESET);
-                }
+                default -> consoleColors.RED("Not a valid response.");
+
             }
         }
 
@@ -175,22 +86,8 @@ public class Main {
         System.out.println("Q - quit");
         System.out.println("-------------------------");
     }
-    public static class ConsoleColors {
-        // Reset
-        public static final String RESET = "\033[0m";  // Text Reset
 
-        // Regular Colors
-        public static final String RED = "\033[0;31m";     // RED
-        public static final String GREEN = "\033[0;32m";   // GREEN
-        public static final String YELLOW = "\033[0;33m";  // YELLOW
 
-        // Bold
-        public static final String RED_BOLD = "\033[1;31m";    // RED
-        public static final String GREEN_BOLD = "\033[1;32m";  // GREEN
-
-        // Underline
-        public static final String RED_UNDERLINED = "\033[4;31m";    // RED
-        public static final String YELLOW_UNDERLINED = "\033[4;33m"; // YELLOW
-
-    }
 }
+// TODO: delete color things for console, 'cause it's doesn't work for standard windows one.
+

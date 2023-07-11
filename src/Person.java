@@ -1,9 +1,16 @@
+import java.util.Scanner;
+
 abstract public class Person {
+    ConsoleColors consoleColors = new ConsoleColors();
+    Scanner scanner = new Scanner(System.in);
+    School school = new School();
+
     private int id;
     private String name;
     private String gender;
     private int age;
     private String post;
+    private String entity = "PERSON";
 
     // Getters
     public int getId() {
@@ -20,6 +27,9 @@ abstract public class Person {
     }
     public String getPost(){
         return post;
+    }
+    public String getEntity() {
+        return entity;
     }
 
 
@@ -39,6 +49,95 @@ abstract public class Person {
     public void setPost(String post){
         this.post = post;
     }
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+
+    // Enter section
+    public void enterName(){
+        this.setName(scanner.nextLine());
+    }
+
+    // Checks the correctness of the entered gender and sets it for the corresponding object.
+    public void enterGender(){
+        String gender = "";
+
+        // checking the correctness of gender input
+        while (!gender.equalsIgnoreCase("m") || !gender.equalsIgnoreCase("f")){
+            gender = scanner.nextLine();
+            if (gender.equalsIgnoreCase("m")){
+                gender = "Male";
+                break;
+            } else if (gender.equalsIgnoreCase("f")) {
+                gender = "Female";
+                break;
+            }
+            else{
+                consoleColors.RED("Wrong gender type!");
+            }
+        }
+        this.setGender(gender);
+    }
+
+    // Checks the correctness of the entered age and sets it for the corresponding object.
+    public void enterAge(int lower_limit, int upper_limit) {
+        while (true) {
+            try {
+                int age = Integer.parseInt(scanner.nextLine());
+                if (age < lower_limit || age > upper_limit) {
+                    consoleColors.RED(String.format("Attention! The age can be from %d to %d inclusive!", lower_limit, upper_limit));
+                }
+                else
+                {
+                    this.setAge(age);
+                    break;
+                }
+
+            } catch (NumberFormatException e) {
+                consoleColors.RED("Invalid data type for age!");
+            }
+        }
+    }
+    // TODO: move this to school. Finish TDATA section.
+    public void getData() {
+        String entity = this.getEntity();
+
+        System.out.println();
+        System.out.println(entity.toUpperCase() + "S: ");  // shows a list of all teachers in the console
+        if (this.entity.equalsIgnoreCase("teacher")){
+            System.out.println("Hello");
+            System.out.println(school.getList_of_teachers().size());
+        }
+
+        System.out.println();
+        System.out.printf("Type %s's id to see more information: ", entity.toLowerCase());
+        System.out.println("Or type \"exit\" to exit");
+        String selected_entity_id = "";
+        while (!selected_entity_id.equals("exit")){
+            try {
+                selected_entity_id = scanner.nextLine();
+                if (selected_entity_id.equalsIgnoreCase("exit")){
+                    consoleColors.GREEN_BOLD("Done");
+                    break;
+                }
+                else {
+                    System.out.println();
+                    if (entity.equals("teacher")){
+                        System.out.println(school.getList_of_teachers().get(Integer.parseInt(selected_entity_id) - 1).toString());
+                    }
+                    else if(entity.equals("student")){
+                        System.out.println("STUDENT PAGE IN PROGRESS...");
+//                        System.out.println(school.getList_of_students().get(Integer.parseInt(selected_entity_id) - 1).toString());
+                    }
+                }
+            }
+            catch (NumberFormatException | IndexOutOfBoundsException e){
+                consoleColors.RED("Wrong id!");
+            }
+        }
+    }
+
 
     @Override
     public String toString() {
@@ -48,6 +147,8 @@ abstract public class Person {
                 "age: " + age + " years old\n" +
                 "post: " + post + "\n";
     }
+
+
 }
 
 class Teacher extends Person {
@@ -70,6 +171,40 @@ class Teacher extends Person {
         this.experience = experience;
     }
 
+    // Enter section
+    public void enterPost(){
+        this.setPost(scanner.nextLine());
+    }
+    // Checks the correctness of the entered salary and sets it for the teacher object.
+    public void enterSalary(){
+        while(true){
+            try {
+                this.setSalary(Double.parseDouble(scanner.nextLine()));
+                break;
+            }
+            catch (NumberFormatException e){
+                consoleColors.RED("Invalid data type for salary!");
+            }
+
+        }
+    }
+    public void enterExperience(){
+        while (true){
+            try{
+                int experience = Integer.parseInt(scanner.nextLine());
+                if (experience >= this.getAge()){
+                    consoleColors.RED("Attention! Experience cannot be greater than or equal to age.");
+                }
+                else {
+                    this.setExperience(experience);
+                    break;
+                }
+            }
+            catch (NumberFormatException e){
+                consoleColors.RED("Wrong data type for experience!");
+            }
+        }
+    }
     @Override
     public String toString() {
         return super.toString() + "salary: " + salary + "₽\n" +

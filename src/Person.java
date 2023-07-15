@@ -3,14 +3,11 @@ import java.util.Scanner;
 abstract public class Person {
     ConsoleColors consoleColors = new ConsoleColors();
     Scanner scanner = new Scanner(System.in);
-    School school = new School();
 
     private int id;
     private String name;
     private String gender;
     private int age;
-    private String post;
-    private String entity = "PERSON";
 
     // Getters
     public int getId() {
@@ -24,12 +21,6 @@ abstract public class Person {
     }
     public int getAge(){
         return this.age;
-    }
-    public String getPost(){
-        return post;
-    }
-    public String getEntity() {
-        return entity;
     }
 
 
@@ -46,13 +37,6 @@ abstract public class Person {
     public void setAge(int age){
         this.age = age;
     }
-    public void setPost(String post){
-        this.post = post;
-    }
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
-
 
     // Enter section
     public void enterName(){
@@ -99,44 +83,6 @@ abstract public class Person {
             }
         }
     }
-    // TODO: move this to school. Finish TDATA section.
-    public void getData() {
-        String entity = this.getEntity();
-
-        System.out.println();
-        System.out.println(entity.toUpperCase() + "S: ");  // shows a list of all teachers in the console
-        if (this.entity.equalsIgnoreCase("teacher")){
-            System.out.println("Hello");
-            System.out.println(school.getList_of_teachers().size());
-        }
-
-        System.out.println();
-        System.out.printf("Type %s's id to see more information: ", entity.toLowerCase());
-        System.out.println("Or type \"exit\" to exit");
-        String selected_entity_id = "";
-        while (!selected_entity_id.equals("exit")){
-            try {
-                selected_entity_id = scanner.nextLine();
-                if (selected_entity_id.equalsIgnoreCase("exit")){
-                    consoleColors.GREEN_BOLD("Done");
-                    break;
-                }
-                else {
-                    System.out.println();
-                    if (entity.equals("teacher")){
-                        System.out.println(school.getList_of_teachers().get(Integer.parseInt(selected_entity_id) - 1).toString());
-                    }
-                    else if(entity.equals("student")){
-                        System.out.println("STUDENT PAGE IN PROGRESS...");
-//                        System.out.println(school.getList_of_students().get(Integer.parseInt(selected_entity_id) - 1).toString());
-                    }
-                }
-            }
-            catch (NumberFormatException | IndexOutOfBoundsException e){
-                consoleColors.RED("Wrong id!");
-            }
-        }
-    }
 
 
     @Override
@@ -144,8 +90,7 @@ abstract public class Person {
         return "id: " + id + "\n" +
                 "name: " + name + "\n" +
                 "gender: " + gender + "\n" +
-                "age: " + age + " years old\n" +
-                "post: " + post + "\n";
+                "age: " + age + " years old\n";
     }
 
 
@@ -154,6 +99,8 @@ abstract public class Person {
 class Teacher extends Person {
     private double salary;
     private int experience;
+    private String post;
+
 
     //  Getters
     public double getSalary(){
@@ -162,6 +109,9 @@ class Teacher extends Person {
     public int getExperience(){
         return experience;
     }
+    public String getPost() {
+        return post;
+    }
 
     //  Setters
     public void setSalary(double salary) {
@@ -169,6 +119,10 @@ class Teacher extends Person {
     }
     public void setExperience(int experience){
         this.experience = experience;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
     }
 
     // Enter section
@@ -207,7 +161,8 @@ class Teacher extends Person {
     }
     @Override
     public String toString() {
-        return super.toString() + "salary: " + salary + "₽\n" +
+        return super.toString() +  "post: " + post + "\n" +
+                                    "salary: " + salary + "₽\n" +
                                     "experience: " + experience + " years\n";
     }
 }
@@ -248,11 +203,67 @@ class Student extends Person {
         this.total_fees = total_fees;
     }
 
+    //enter section
+    public void enterGrade(){
+        while(true){
+            try {
+                grade = Integer.parseInt(scanner.nextLine());
+                if (grade >= 1 && grade <= 11){
+                    this.setGrade(grade);
+                    break;
+                }
+                else{
+                    consoleColors.RED("Attention! The grade must be from 1 to 11 inclusive.");
+                }
+            }
+            catch (NumberFormatException e){
+                consoleColors.RED("Wrong data type for grade!");
+            }
+        }
+    }
+
+    public void enterAvg_mark(){
+        while (true){
+            try {
+                avg_mark = Double.parseDouble(scanner.nextLine());
+                if (avg_mark < 0 || avg_mark > 5){
+                    consoleColors.RED("Attention! Average mark must be from 0 to 5 inclusive!");
+                }
+                else{
+                    this.setAvg_mark(avg_mark);
+                    break;
+                }
+            }
+            catch (NumberFormatException e){
+                consoleColors.RED("Wrong data type for average mark!");
+            }
+        }
+    }
+    public void enterFees(){
+        while (true){
+            try {
+                fees = Double.parseDouble(scanner.nextLine());
+                if (fees < 0){
+                    consoleColors.RED("Attention! Fees must be greater than or equals to 0.");
+                }
+                else {
+                    this.setFees(fees);
+                    this.setTotal_fees(getTotal_fees() + fees);
+                    break;
+                }
+            }
+            catch (NumberFormatException e){
+                consoleColors.RED("Wrong data type for fees!");
+            }
+        }
+    }
+
+
     @Override
     public String toString() {
-        return  "grade: " + grade + "\n" +
-                "avg_mark: " + avg_mark + "\n" +
-                "fees: " + fees + "₽\n" +
-                "total_fees: " + total_fees + "₽\n";
+        return super.toString() +  "grade: " + grade + "\n" +
+                                    "avg_mark: " + avg_mark + "\n" +
+                                    "fees: " + fees + "₽\n" +
+                                    "total_fees: " + total_fees + "₽\n";
     }
 }

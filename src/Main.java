@@ -8,8 +8,9 @@ public class Main {
         new Teacher();
         Scanner scanner = new Scanner(System.in);
         ConsoleColors consoleColors = new ConsoleColors();
+        int teacherId = 0;
+        int studentId = 0;
 
-        int id = 0;
 
         info();
         String response = "";
@@ -25,8 +26,8 @@ public class Main {
                     if (list_of_teachers != null && !list_of_teachers.isEmpty()) {
                         Teacher teacher = list_of_teachers.get(list_of_teachers.size() - 1);
 
-                        id++;
-                        teacher.setId(id);
+                        teacherId++;
+                        teacher.setId(teacherId);
 
                         System.out.println("Enter the teacher's name: ");
                         teacher.enterName();
@@ -51,20 +52,51 @@ public class Main {
                         consoleColors.GREEN_BOLD("Done");
                     }
                 }
-                case ("STUD") -> System.out.println("add new student here");
+                case ("STUD") -> {
+                    school.addStudent();
+                    ArrayList<Student> list_of_students = school.getList_of_students();
+                    if (list_of_students != null && !list_of_students.isEmpty()){
+                        Student student = list_of_students.get(list_of_students.size() - 1);
+                        studentId++;
+                        student.setId(studentId);
+
+                        System.out.println("Enter the student's name: ");
+                        student.enterName();
+
+                        System.out.println("Enter the student's gender: ");
+                        System.out.println("f - Female, m - Male");
+                        student.enterGender();
+
+                        System.out.println("Enter the student's age: ");
+                        student.enterAge(6, 20);
+
+                        System.out.println("Enter the student's grade: ");
+                        student.enterGrade();
+
+                        System.out.println("Enter the student's fees: ");
+                        student.enterFees();
+
+                        consoleColors.GREEN_BOLD("Done");
+                    }
+                }
                 case ("TDATA") -> {
 
                     if (school.getList_of_teachers() != null && !school.getList_of_teachers().isEmpty()){
-                        Teacher teacher = new Teacher();
-                        teacher.setEntity("Teacher");
-                        teacher.getData();
+                        school.getData("Teacher");
                     }
                     else{
-                        consoleColors.YELLOW("It's seems like there is no teachers.");
+                        consoleColors.YELLOW("It's seems like there are no teachers.");
                     }
 
                 }
-                case ("SDATA") -> System.out.println("get students data here");
+                case ("SDATA") -> {
+                    if (school.getList_of_students() != null && !school.getList_of_students().isEmpty()){
+                        school.getData("Student");
+                    }
+                    else {
+                        consoleColors.YELLOW("It's seems like there are no students.");
+                    }
+                }
                 case ("HELP") -> info();
 
                 case ("Q") -> consoleColors.GREEN_BOLD("Goodbye!");

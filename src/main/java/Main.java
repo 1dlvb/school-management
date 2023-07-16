@@ -8,10 +8,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        Dotenv dotenv = null;
-        String username = "admin";
-        String password = "admin";
-        String connectionUrl = "jdbc:mysql://localhost:3306/school_management";
+        Dotenv dotenv = Dotenv.configure().load();
+        String username = dotenv.get("DB_USERNAME");
+        String password = dotenv.get("DB_PASSWORD");
+        String connectionUrl = dotenv.get("DB_URL");
 
         try{
             Connection connection = DriverManager.getConnection(connectionUrl, username, password);

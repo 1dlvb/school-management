@@ -3,12 +3,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-
-
         School school = new School();
-        new Teacher();
         new Student();
+        new Teacher();
         Scanner scanner = new Scanner(System.in);
         ConsoleColors consoleColors = new ConsoleColors();
         int teacherId = 0;

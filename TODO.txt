@@ -1,3 +1,0 @@
-+ A school object with teachers, students, revenue, and expenses.
-+ A teacher object with a name, id, and salary.
-+ A student object with a name, id, grade, fees paid, and total fees.

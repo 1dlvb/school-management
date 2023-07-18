@@ -1,30 +1,23 @@
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         Dotenv dotenv = Dotenv.configure().load();
         String username = dotenv.get("DB_USERNAME");
         String password = dotenv.get("DB_PASSWORD");
         String connectionUrl = dotenv.get("DB_URL");
 
-        try{
-            Connection connection = DriverManager.getConnection(connectionUrl, username, password);
-            System.out.println("we're connected!");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-
-
+        DB db = new DB(connectionUrl, username, password);
         School school = new School();
         new Teacher();
         new Student();
+
+
         Scanner scanner = new Scanner(System.in);
         ConsoleColors consoleColors = new ConsoleColors();
         int teacherId = 0;
@@ -68,6 +61,7 @@ public class Main {
                         System.out.println("Enter the teacher's experience: ");
                         teacher.enterExperience();
 
+                        db.setData(school.getList_of_teachers());
                         consoleColors.GREEN_BOLD("Done");
                     }
                 }
@@ -89,12 +83,15 @@ public class Main {
                         System.out.println("Enter the student's age: ");
                         student.enterAge(6, 20);
 
+                        System.out.println("Enter the student's average mark: ");
+                        student.enterAvg_mark();
+
                         System.out.println("Enter the student's grade: ");
                         student.enterGrade();
 
                         System.out.println("Enter the student's fees: ");
                         student.enterFees();
-
+                        db.setData(school.getList_of_students());
                         consoleColors.GREEN_BOLD("Done");
                     }
                 }

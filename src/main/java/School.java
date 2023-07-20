@@ -75,7 +75,7 @@ public class School {
     public void setList_of_students(ArrayList<Student> list_of_students){
         this.list_of_students = list_of_students;
     }
-    public void getData(String entity, ArrayList<String> data) throws SQLException {
+    public void getData(String entity, ArrayList<String> data){
         System.out.println();
         if (data.isEmpty()){
             System.out.println("Empty!");

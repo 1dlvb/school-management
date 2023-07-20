@@ -91,31 +91,20 @@ public class Main {
 
                         System.out.println("Enter the student's fees: ");
                         student.enterFees();
+
                         db.setData(school.getList_of_students());
                         consoleColors.GREEN_BOLD("Done");
                     }
                 }
                 case ("TDATA") -> {
-
-                    if (school.getList_of_teachers() != null && !school.getList_of_teachers().isEmpty()){
-                        school.getData("Teacher");
-                    }
-                    else{
-                        consoleColors.YELLOW("It's seems like there are no teachers.");
-                    }
-
+                    school.getData("Teacher", db.getDataPreviewFromDB("teachers"));
                 }
                 case ("SDATA") -> {
-                    if (school.getList_of_students() != null && !school.getList_of_students().isEmpty()){
-                        school.getData("Student");
-                    }
-                    else {
-                        consoleColors.YELLOW("It's seems like there are no students.");
-                    }
+                    school.getData("Student", db.getDataPreviewFromDB("students"));
                 }
                 case ("HELP") -> info();
 
-                case ("Q") -> consoleColors.GREEN_BOLD("Goodbye!");
+                case ("Q"), ("QUIT") -> consoleColors.GREEN_BOLD("Goodbye!");
                 case (""), (" "), ("\n") -> {}
                 default -> consoleColors.RED("Not a valid response.");
 
@@ -131,11 +120,9 @@ public class Main {
         System.out.println("TDATA - get teachers data");
         System.out.println("SDATA - get students data");
         System.out.println("HELP - shows this menu again");
-        System.out.println("Q - quit");
+        System.out.println("Q/QUIT - quit");
         System.out.println("-------------------------");
     }
 
 
 }
-// TODO: delete color things for console, 'cause it's doesn't work for standard windows one.
-

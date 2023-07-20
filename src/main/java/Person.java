@@ -161,9 +161,11 @@ class Teacher extends Person {
     }
     @Override
     public String toString() {
-        return super.toString() +  "post: " + post + "\n" +
+        return super.toString() +
                 "salary: " + salary + "₽\n" +
-                "experience: " + experience + " years\n";
+                "experience: " + experience + " years\n" +
+                "post: " + post + "\n";
+
     }
 }
 

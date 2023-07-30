@@ -83,6 +83,7 @@ public class School {
         }
         System.out.println(entity.toUpperCase() + "S: ");  // shows a list of all teachers in the console
         if (entity.equalsIgnoreCase("teacher")){
+            //TODO: use a hash map. Problems with long names with spaces in them.
             for(String line: data){
                 String[] parts = line.split(" ");
                 System.out.println("| " + parts[0] + " | " + parts[1] + " |");
@@ -95,11 +96,9 @@ public class School {
         }
 
 
-        System.out.println();
-        System.out.printf("Type %s's id to see more information: \n", entity.toLowerCase());
-        System.out.println("Or type \"exit\" to exit");
         String selected_entity_id = "";
         while (!selected_entity_id.equals("exit")){
+            System.out.print("ID: ");
             try {
                 selected_entity_id = scanner.nextLine();
                 if (selected_entity_id.equalsIgnoreCase("exit")){

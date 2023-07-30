@@ -39,51 +39,69 @@ abstract public class Person {
     }
 
     // Enter section
-    public void enterName(){
-        this.setName(scanner.nextLine());
+    public String enterName(){
+        return scanner.nextLine();
     }
 
     // Checks the correctness of the entered gender and sets it for the corresponding object.
-    public void enterGender(){
+    public String enterGender() {
         String gender = "";
 
         // checking the correctness of gender input
-        while (!gender.equalsIgnoreCase("m") || !gender.equalsIgnoreCase("f")){
+        while (true) {
             gender = scanner.nextLine();
-            if (gender.equalsIgnoreCase("m")){
-                gender = "Male";
-                break;
-            } else if (gender.equalsIgnoreCase("f")) {
-                gender = "Female";
-                break;
-            }
-            else{
+            gender = checkGender(gender);
+
+            if (!gender.equalsIgnoreCase("error")) {
+                return gender;
+            } else {
                 consoleColors.RED("Wrong gender type!");
             }
+
         }
-        this.setGender(gender);
     }
 
     // Checks the correctness of the entered age and sets it for the corresponding object.
-    public void enterAge(int lower_limit, int upper_limit) {
+    public int enterAge(int lower_limit, int upper_limit) {
         while (true) {
-            try {
-                int age = Integer.parseInt(scanner.nextLine());
-                if (age < lower_limit || age > upper_limit) {
-                    consoleColors.RED(String.format("Attention! The age can be from %d to %d inclusive!", lower_limit, upper_limit));
-                }
-                else
-                {
-                    this.setAge(age);
-                    break;
-                }
-
-            } catch (NumberFormatException e) {
-                consoleColors.RED("Invalid data type for age!");
+            String age = scanner.nextLine();
+            if (checkAge(age, lower_limit, upper_limit)){
+                return Integer.parseInt(age);
             }
+            else{
+                consoleColors.RED(String.format("Attention! The age can be from %d to %d inclusive! Age must be a numeric value.",
+                        lower_limit, upper_limit));
+            }
+
         }
     }
 
+    // methods that checks correctness of entered data.
+    //TODO: rework checkGender
+    public String checkGender(String gender){
+        if (gender.equalsIgnoreCase("m")){
+            return "Male";
+        } else if (gender.equalsIgnoreCase("f")) {
+            return "Female";
+        }
+        else{
+            return "Error";
+        }
+    }
+    public boolean checkAge(String age, int lower_limit, int upper_limit){
+        try {
+            if (Integer.parseInt(age) < lower_limit || Integer.parseInt(age) > upper_limit) {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
     @Override
     public String toString() {
@@ -126,37 +144,60 @@ class Teacher extends Person {
     }
 
     // Enter section
-    public void enterPost(){
-        this.setPost(scanner.nextLine());
+    public String enterPost(){
+        return scanner.nextLine();
     }
     // Checks the correctness of the entered salary and sets it for the teacher object.
-    public void enterSalary(){
+    public double enterSalary(){
         while(true){
-            try {
-                this.setSalary(Double.parseDouble(scanner.nextLine()));
-                break;
+            String salary = scanner.nextLine();
+            if (checkSalary(salary)){
+                return Double.parseDouble(salary);
             }
-            catch (NumberFormatException e){
+            else {
                 consoleColors.RED("Invalid data type for salary!");
+            }
+        }
+    }
+    public int enterExperience(){
+        while (true){
+            String experience = scanner.nextLine();
+            if (checkExperience(experience, this.getAge())){
+                return Integer.parseInt(experience);
+            }
+            else {
+                consoleColors.RED(String.format("Attention! Experience must be less than or equal to %d years. Experience" +
+                        " must be numeric value.", this.getAge() - 12));
+
             }
 
         }
     }
-    public void enterExperience(){
-        while (true){
-            try{
-                int experience = Integer.parseInt(scanner.nextLine());
-                if (experience >= this.getAge()){
-                    consoleColors.RED("Attention! Experience cannot be greater than or equal to age.");
-                }
-                else {
-                    this.setExperience(experience);
-                    break;
-                }
+
+    public boolean checkSalary(String salary){
+        try {
+            if(Double.parseDouble(salary) >= 0){
+                return true;
             }
-            catch (NumberFormatException e){
-                consoleColors.RED("Wrong data type for experience!");
+            else {
+                return false;
             }
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
+    }
+    public boolean checkExperience(String experience, int age){
+        try{
+            if (Integer.parseInt(experience) < 0 || age - Integer.parseInt(experience) < 12){
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        catch (NumberFormatException e){
+            return false;
         }
     }
     @Override
@@ -206,60 +247,84 @@ class Student extends Person {
     }
 
     //enter section
-    public void enterGrade(){
+    public int enterGrade(){
         while(true){
-            try {
-                grade = Integer.parseInt(scanner.nextLine());
-                if (grade >= 1 && grade <= 11){
-                    this.setGrade(grade);
-                    break;
-                }
-                else{
-                    consoleColors.RED("Attention! The grade must be from 1 to 11 inclusive.");
-                }
+            String grade = scanner.nextLine();
+            if(checkGrade(grade)){
+                return Integer.parseInt(grade);
             }
-            catch (NumberFormatException e){
-                consoleColors.RED("Wrong data type for grade!");
+            else {
+                consoleColors.RED("Attention! The grade must be from 1 to 11 inclusive. Grade must be a numeric value.");
+            }
+
+        }
+    }
+
+    public double enterAvg_mark(){
+        while (true){
+            String avg_mark = scanner.nextLine();
+            if (checkAvg_mark(avg_mark)){
+                return Double.parseDouble(avg_mark);
+            }
+            else {
+                consoleColors.RED("Attention! Average mark must be from 0 to 5 inclusive! Average mark must be numeric value.");
+            }
+
+        }
+    }
+    public double enterFees(){
+        while (true){
+            String fees = scanner.nextLine();
+            if (checkFees(fees)){
+                return Double.parseDouble(fees);
+            }
+            else {
+                consoleColors.RED("Attention! Fees must be greater than or equals to 0. Fees must be numeric value.");
             }
         }
     }
 
-    public void enterAvg_mark(){
-        while (true){
-            try {
-                avg_mark = Double.parseDouble(scanner.nextLine());
-                if (avg_mark < 0 || avg_mark > 5){
-                    consoleColors.RED("Attention! Average mark must be from 0 to 5 inclusive!");
-                }
-                else{
-                    this.setAvg_mark(avg_mark);
-                    break;
-                }
+    // methods that checks correctness of entered data.
+    public boolean checkGrade(String grade){
+        try {
+            if (Integer.parseInt(grade) >= 1 && Integer.parseInt(grade) <= 11){
+                return true;
             }
-            catch (NumberFormatException e){
-                consoleColors.RED("Wrong data type for average mark!");
+            else{
+                return false;
             }
         }
-    }
-    public void enterFees(){
-        while (true){
-            try {
-                fees = Double.parseDouble(scanner.nextLine());
-                if (fees < 0){
-                    consoleColors.RED("Attention! Fees must be greater than or equals to 0.");
-                }
-                else {
-                    this.setFees(fees);
-                    this.setTotal_fees(getTotal_fees() + fees);
-                    break;
-                }
-            }
-            catch (NumberFormatException e){
-                consoleColors.RED("Wrong data type for fees!");
-            }
+        catch (NumberFormatException e){
+            return false;
         }
     }
 
+    public boolean checkAvg_mark(String avg_mark){
+        try {
+            if (Double.parseDouble(avg_mark) < 0 || Double.parseDouble(avg_mark) > 5){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
+    }
+    public boolean checkFees(String fees){
+        try {
+            if (Double.parseDouble(fees) < 0){
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
+    }
 
     @Override
     public String toString() {
